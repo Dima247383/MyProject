@@ -22,8 +22,8 @@
 ### Шаги запуска
 
 1.  Клонируйте репозиторий:
-        git clone https://github.com/Dima247383/search_engine.git
-    cd search_engine
+        git clone https://github.com/Dima247383/MyProject.git
+    cd MyProject
     
 
 2.  Создайте директорию для сборки:
