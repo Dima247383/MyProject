@@ -43,9 +43,7 @@
     
 
 5.  Запустите приложение:
-        ./search_engine
-    
-    (Или `search_engine.exe` для Windows)
+        `MyProject.exe` для Windows
 
 ### Настройка приложения
 
