@@ -5,31 +5,23 @@
 #include <string>
 #include <vector>
 #include <nlohmann/json.hpp>
+#include "SearchServer.h"
 
 class ConverterJSON {
 public:
 	ConverterJSON() = default;
 
-	/**
-	 * @return Возвращает список с содержимым файлов, перечисленных в config.json
-	 */
+	//Returns a list with the contents of the files listed in config.json
 	std::vector<std::string> GetTextDocuments();
 
-	/**
-	 * @return Возвращает поле max_responses для определения предельного
-	 * количества ответов на один запрос
-	 */
+	//Returns the max_responses field to determine the maximum number of responses per request.
 	int GetResponsesLimit();
 
-	/**
-	 * @return возвращает список запросов из файла requests.json
-	 */
+	//returns a list of requests from the requests.json file
 	std::vector<std::string> GetRequests();
 
-	/**
-	 * Положить в файл answers.json результаты поисковых запросов
-	 */
-	void putAnswers(const std::vector<std::vector<std::pair<int, float>>>& answers);
+	//Put the search results into the answers.json file
+	void putAnswers(const std::vector<std::vector<RelativeIndex>>& answers);
 
 	nlohmann::json getConfig() const;
 

@@ -6,23 +6,42 @@ std::vector<std::string> ConverterJSON::GetTextDocuments() {
 	std::vector<std::string> documents;
 	try {
 		std::ifstream f("E://cmakeprojects//exemple1//resources//config.json"); 
-		config_ = nlohmann::json::parse(f);
-
-		for (const auto& file : config_["files"]) {
-			std::ifstream file_stream(file.get<std::string>());
-			if (file_stream.is_open()) {
-				std::string content((std::istreambuf_iterator<char>(file_stream)),
-					(std::istreambuf_iterator<char>()));
-				documents.push_back(content);
-				file_stream.close();
+		if (!f.is_open()) {
+			throw std::runtime_error("config file is missing!");
+		}
+		else {
+			f >> config_;
+			if (config_.find("config") == config_.end()) {
+				throw std::out_of_range("config file is empty!");
 			}
 			else {
-				std::cerr << "Error opening file: " << file.get<std::string>() << std::endl;
+				if (!config_["files"].empty()) {
+					std::cout << config_["config"]["name"] << std::endl;
+					for (const auto& file : config_["files"]) {
+						std::ifstream file_stream(file.get<std::string>());
+						if (file_stream.is_open()) {
+							std::string content((std::istreambuf_iterator<char>(file_stream)),
+								(std::istreambuf_iterator<char>()));
+							documents.push_back(content);
+							file_stream.close();
+						}
+						else {
+							std::cerr << "Error opening file: " << file.get<std::string>() << std::endl;
+						}
+					}
+				}
+				else {
+					std::cerr << "No links to documents!" << std::endl;
+				}
+				
 			}
-		}
+		}		
 	}
-	catch (const std::exception& e) {
-		std::cerr << "Error reading or parsing config.json: " << e.what() << std::endl;
+	catch (const std::runtime_error& ex) {
+		std::cerr << ex.what() << std::endl;
+	}
+	catch (const std::out_of_range& ex) {
+		std::cerr << ex.what() << std::endl;
 	}
 	return documents;
 }
@@ -50,20 +69,30 @@ std::vector<std::string> ConverterJSON::GetRequests() {
 	try {
 		std::ifstream f("E://cmakeprojects//exemple1//resources//requests.json");
 		requests_ = nlohmann::json::parse(f);
-
-		if (requests_.contains("requests") && requests_["requests"].is_array()) {
-			for (const auto& request : requests_["requests"]) {
-				requests.push_back(request.get<std::string>());
+		if (!f.is_open()) {
+			throw std::runtime_error("requests file is missing!");
+		}
+		else {
+			if (requests_["requests"].empty()) {
+				std::cerr << "no requests" << std::endl;
 			}
+			else {
+				if (requests_.contains("requests") && requests_["requests"].is_array()) {
+					for (const auto& request : requests_["requests"]) {
+						requests.push_back(request.get<std::string>());
+					}
+				}
+			}
+			
 		}
 	}
-	catch (const std::exception& e) {
-		std::cerr << "Error reading or parsing requests.json: " << e.what() << std::endl;
+	catch (const std::runtime_error& ex) {
+		std::cerr << ex.what() << std::endl;
 	}
 	return requests;
 }
 
-void ConverterJSON::putAnswers(const std::vector<std::vector<std::pair<int, float>>>& answers) {
+void ConverterJSON::putAnswers(const std::vector<std::vector<RelativeIndex>>& answers) {
 	nlohmann::json j;
 	j["answers"] = nlohmann::json::object();
 	for (size_t i = 0; i < answers.size(); ++i) {
@@ -76,8 +105,8 @@ void ConverterJSON::putAnswers(const std::vector<std::vector<std::pair<int, floa
 			j["answers"][request_id]["result"] = true;
 			j["answers"][request_id]["relevance"] = nlohmann::json::object();
 			for (const auto& pair : answers[i]) {
-				std::string docid = std::to_string(pair.first);
-				j["answers"][request_id]["relevance"][docid] = { {"docid", pair.first}, {"rank", pair.second} };
+				std::string docid = std::to_string(pair.doc_id);
+				j["answers"][request_id]["relevance"][docid] = { {"docid", pair.doc_id}, {"rank", pair.rank} };
 			}
 		}
 	}
