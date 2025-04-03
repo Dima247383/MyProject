@@ -52,34 +52,13 @@
 *   **`config.json`:** Содержит общую информацию о поисковом движке, список файлов для индексации и другие параметры.
 #### Пример правильного заполнения данного файла:
 ![image](https://github.com/user-attachments/assets/d98cfbbe-497f-4e07-826e-1f5cb4da2cd4)
+
 *   **`requests.json`:** Содержит поисковые запросы.
 #### Пример правильного заполнения запросов:
 ![image](https://github.com/user-attachments/assets/70f1fe05-2795-4ae9-876c-7d27e14835ca)
+
 *   **`answers.json`:** Файл, в который приложение записывает результаты поиска. Если файл отсутствует, он будет создан. Существующий файл будет очищен перед записью.
 
-#### Пример файла `config.json`:
-{
-  "config": {
-    "name": "SkillboxSearchEngine",
-    "version": "0.1",
-    "max_responses": 5
-  },
-  "files": [
-    "../resources/file001.txt",
-    "../resources/file002.txt",
-    "../resources/file003.txt",
-    "../resources/file004.txt"
-  ]
-}
-#### Пример файла `requests.json`:
-{
-  "requests": [
-    "some words..",
-    "some words..",
-    "some words..",
-    "some words.."
-  ]
-}
 #### Характеристика классов:
 1. `ConverterJSON`
 * Считываtn конфигурационные данные из JSON.
