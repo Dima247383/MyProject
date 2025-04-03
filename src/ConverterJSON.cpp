@@ -1,3 +1,6 @@
+#define PATHCONFIG "../../../resources/config.json"
+#define PATHREQUESTS "../../../resources/requests.json"
+
 #include "ConverterJSON.h"
 #include <fstream>
 #include <iostream>
@@ -5,7 +8,7 @@
 std::vector<std::string> ConverterJSON::GetTextDocuments() {
 	std::vector<std::string> documents;
 	try {
-		std::ifstream f("E://cmakeprojects//exemple1//resources//config.json"); 
+		std::ifstream f(PATHCONFIG);
 		if (!f.is_open()) {
 			throw std::runtime_error("config file is missing!");
 		}
@@ -48,7 +51,7 @@ std::vector<std::string> ConverterJSON::GetTextDocuments() {
 
 int ConverterJSON::GetResponsesLimit() {
 	try {
-		std::ifstream f("E://cmakeprojects//exemple1//resources//config.json");
+		std::ifstream f(PATHCONFIG);
 		config_ = nlohmann::json::parse(f);
 
 		if (config_.contains("config") && config_["config"].contains("max_responses")) {
@@ -67,7 +70,7 @@ int ConverterJSON::GetResponsesLimit() {
 std::vector<std::string> ConverterJSON::GetRequests() {
 	std::vector<std::string> requests;
 	try {
-		std::ifstream f("E://cmakeprojects//exemple1//resources//requests.json");
+		std::ifstream f(PATHREQUESTS);
 		requests_ = nlohmann::json::parse(f);
 		if (!f.is_open()) {
 			throw std::runtime_error("requests file is missing!");

@@ -73,6 +73,7 @@ TEST(TestCase_ConverterJSON, Limit) {
     ASSERT_EQ(limit, 5); // Предполагаем, что в config.json указано max_responses = 5
 }
 
+// Test for SearchServer
 TEST(TestCase_SearchServer, TestSimple) {
     const std::vector<std::string> docs = {
         "milk milk milk milk water water water",
@@ -133,3 +134,5 @@ TEST(TestCase_SearchServer, TestTop5) {
     std::vector<std::vector<RelativeIndex>> result = srv.search(request);
     ASSERT_EQ(result, expected);
 }
+
+
